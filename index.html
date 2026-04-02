@@ -1208,56 +1208,64 @@ const subjectApps = {
   physiology: { comp: PhysiologyApp, label:"Physiology", icon:"⚡", color:"#8b5cf6" },
   histology: { comp: HistologyApp, label:"Histology", icon:"🔬", color:"#f87171" },
 };
+function App() {
+  const [selected, setSelected] = useState(null)
 
-function App()
-  const [selected, setSelected] = useState(null);
+  const subjectApps = {
+    biochem: { comp: BiochemApp, label:"Biochemistry", icon:"🧬", color:"#3b82f6" },
+    anatomy: { comp: AnatomyApp, label:"Anatomy", icon:"🫀", color:"#10b981" },
+    physiology: { comp: PhysiologyApp, label:"Physiology", icon:"⚡", color:"#8b5cf6" },
+    histology: { comp: HistologyApp, label:"Histology", icon:"🔬", color:"#f87171" },
+  }
 
-  const subj = selected ? subjectApps[selected] : null;
-  const SubjectComp = subj ? subj.comp : null;
+  const subj = selected ? subjectApps[selected] : null
+  const SubjectComp = subj ? subj.comp : null
 
   return (
-    <div style={{
-      minHeight:"100vh",
-      background:"linear-gradient(135deg, #0a0f1e 0%, #0d1a2e 50%, #0a1628 100%)",
-      fontFamily:"'Cairo', 'Segoe UI', sans-serif",
-      direction:"ltr",
-      padding:"0 0 40px 0"
-    }}>
+    <div style={{ minHeight:"100vh", background:"linear-gradient(135deg,#0a0f1e,#0d1a2e,#0a1628)", fontFamily:"'Segoe UI',sans-serif", padding:"0 0 40px 0" }}>
       {selected && (
-        <div style={{
-          background:"linear-gradient(135deg, #1a2a4a, #0f1e35)",
-          borderBottom:"2px solid #2a4a7a",
-          padding:"14px 24px",
-          position:"sticky", top:0, zIndex:100,
-          boxShadow:"0 4px 20px rgba(0,0,0,0.5)",
-          display:"flex", alignItems:"center", gap:12
-        }}>
-          <button onClick={()=>setSelected(null)} style={{
-            background:"rgba(255,255,255,0.08)", border:"2px solid rgba(255,255,255,0.15)",
-            borderRadius:10, padding:"6px 14px", color:"#94a3b8",
-            cursor:"pointer", fontSize:12, fontWeight:700, fontFamily:"inherit",
-            display:"flex", alignItems:"center", gap:6, flexShrink:0
-          }}>
-            ← الرئيسية
+        <div style={{ background:"#1a2a4a", borderBottom:"2px solid #2a4a7a", padding:"14px 24px", position:"sticky", top:0, zIndex:100, display:"flex", alignItems:"center", gap:12 }}>
+          <button onClick={() => setSelected(null)} style={{ background:"rgba(255,255,255,0.08)", border:"2px solid rgba(255,255,255,0.15)", borderRadius:10, padding:"6px 14px", color:"#94a3b8", cursor:"pointer", fontSize:12, fontWeight:700 }}>
+            ← Back
           </button>
-          <div style={{ flex:1, textAlign:"center" }}>
-            <div style={{ fontSize:11, color:"#7eb8ff", letterSpacing:2, textTransform:"uppercase" }}>ZNU — GIT Module</div>
-            <div style={{ fontSize:18, fontWeight:900, color:"#fff" }}>{subj.icon} {subj.label}</div>
-          </div>
-          <div style={{ width:80 }} />
+          <div style={{ flex:1, textAlign:"center", color:"#fff", fontWeight:900, fontSize:18 }}>{subj.icon} {subj.label}</div>
+          <div style={{ width:60 }} />
         </div>
       )}
 
       {!selected ? (
-        <HomeScreen onSelect={setSelected} />
+        <div style={{ padding:"24px 16px", maxWidth:700, margin:"0 auto" }}>
+          <div style={{ textAlign:"center", padding:"40px 0 30px" }}>
+            <div style={{ fontSize:48, marginBottom:12 }}>📚</div>
+            <div style={{ fontSize:28, fontWeight:900, color:"#fff", marginBottom:8 }}>GIT End Module</div>
+            <div style={{ fontSize:16, color:"#94a3b8" }}>Select a subject to start reviewing</div>
+          </div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+            {Object.entries(subjectApps).map(([key, s]) => (
+              <div key={key} onClick={() => setSelected(key)} style={{
+                background:`linear-gradient(135deg,${s.color}20,${s.color}10)`,
+                border:`2px solid ${s.color}40`,
+                borderRadius:20, padding:"28px 16px",
+                textAlign:"center", cursor:"pointer",
+                transition:"all 0.2s"
+              }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = s.color; e.currentTarget.style.transform = "translateY(-4px)" }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = `${s.color}40`; e.currentTarget.style.transform = "translateY(0)" }}>
+                <div style={{ fontSize:36, marginBottom:10 }}>{s.icon}</div>
+                <div style={{ fontWeight:900, color:"#fff", fontSize:16 }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       ) : (
         <div style={{ maxWidth:900, margin:"0 auto", padding:"20px 16px" }}>
           <SubjectComp />
         </div>
       )}
     </div>
-  );
+  )
 }
+
   ReactDOM.createRoot(document.getElementById('root')).render(<App />)
   </script>
 </body>
